@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+        body {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .form-container {
+            width: 90%; /* Reduced width to fit small screens */
+            max-width: 500px; /* Ensures a good size on larger screens */
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px; /* Slightly smaller font size */
+        }
+        .form-group label {
+            font-size: 14px; /* Reduce label font size */
+        }
+        .form-control, .form-check-input {
+            font-size: 14px; /* Adjust input font size */
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>ADD TRIPS HERE</h1>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="place_name">Place Name</label>
+            <input type="text" class="form-control" id="place_name" name="place_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="weather">Weather</label>
+            <input type="text" class="form-control" id="weather" name="weather" required>
+        </div>
+
+        <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" class="form-control" id="state" name="state" required>
+        </div>
+
+        <div class="form-group">
+            <label for="district">District</label>
+            <input type="text" class="form-control" id="district" name="district" required>
+        </div>
+
+        <div class="form-group">
+            <label for="google_map_link">Google Map Link</label>
+            <input type="url" class="form-control" id="google_map_link" name="google_map_link" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="Trip_img">Trip Image</label>
+            <input type="file" class="form-control-file" id="Trip_img" name="Trip_img">
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">Submit</button>
+    </form>
+</div>
+{% endblock %}

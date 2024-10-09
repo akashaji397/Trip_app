@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% if results %}
+<div class="container">
+    <div class="row">
+        {% for trip in results %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm p-3 bg-body rounded animate__animated animate__zoomIn animate__delay-1s">
+                    <img src="{{ trip.Trip_img.url }}" class="card-img-top" alt="{{ trip.Name }}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ trip.place_name }}</h5>
+                        <p class="card-text">{{ trip.state }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{% url 'trip_fetch' trip.id %}" class="btn btn-success">Details</a>
+                        <a href="{% url 'update_detail' trip.id %}" class="btn btn-primary">Update</a>
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ forloop.counter }}">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Definition -->
+            <div class="modal fade" id="exampleModal-{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">More Options for {{ trip.Name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Add modal content for more options here -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">
+    No trips found.
+</div>
+{% endif %}
+
+{% endblock %}

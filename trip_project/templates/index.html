@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Search Form -->
+<div class="d-flex justify-content-center mb-4">
+    <form action="{% url 'trip_search' %}" method="GET" class="input-group" style="max-width: 500px;">
+        {% csrf_token %}
+        <input 
+            type="text" 
+            name="name"  
+            class="form-control" 
+            placeholder="Search for trips..." 
+            aria-label="Search for trips" 
+            required
+        >
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search"></i> Search
+        </button>
+    </form>
+</div>
+
+<!-- Display Search Results if 'data' is present -->
+{% if data %}
+    <div class="container">
+        <div class="row">
+            {% for trip in data %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm p-3 bg-body rounded animate__animated animate__zoomIn animate__delay-1s">
+                        <img src="{{ trip.Trip_img }}" class="card-img-top" alt="{{ trip.place_name }}" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{ trip.place_name }}</h5>
+                            <p class="card-text">weather:{{ trip.weather }}</p>
+                            
+                            <p class="badge bg-secondary">State: {{ trip.state }}</p>
+                            <p class="badge bg-secondary">District: {{ trip.district }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="/trip_detail/{{ trip.id }}/" class="btn btn-success">Detail</a>
+                            <a href="/update_detail/{{ trip.id }}/" class="btn btn-primary">Update</a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ forloop.counter }}">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <!-- Display Paginated Trips if 'data' is not present -->
+    <div class="container">
+        <div class="row">
+            {% for trip in trips.object_list %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm p-3 bg-body rounded animate__animated animate__zoomIn animate__delay-1s">
+                        <img src="{{ trip.Trip_img }}" class="card-img-top" alt="{{ trip.place_name }}" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{ trip.place_name }}</h5>
+                            <p class="card-text"><b>Weather: </b>{{ trip.weather }}</p>
+                            
+                            <p class="badge bg-secondary">State: {{ trip.state }}</p>
+                            <p class="badge bg-secondary">District: {{ trip.district }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="/trip_fetch/{{ trip.id }}" class="btn btn-success">Details</a>
+                            <a href="/update_detail/{{ trip.id }}" class="btn btn-primary">Update</a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ forloop.counter }}">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<!-- Pagination -->
+{% if not data and trips.paginator.num_pages > 1 %}
+    <div class="d-flex justify-content-center mb-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% for pg in trips.paginator.page_range %}
+                    <li class="page-item {% if trips.number == pg %}active{% endif %}">
+                        <a class="page-link" href="?page={{ pg }}">{{ pg }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+{% endif %}
+
+<!-- Delete Modals -->
+{% for trip in data|default:trips.object_list %}
+    <div class="modal fade" id="exampleModal-{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel-{{ forloop.counter }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel-{{ forloop.counter }}">Delete Trip</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Do you want to delete the trip to <strong>{{ trip.place_name }}</strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ forloop.counter }}">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

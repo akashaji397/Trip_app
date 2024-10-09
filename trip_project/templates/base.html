@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Application</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ECF0F1;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .wrapper {
+            display: flex;
+            flex: 1;
+        }
+        /* Sidebar styling */
+        .sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background-color: #2C3E50;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            padding: 30px 20px;
+            transition: all 0.3s;
+        }
+        .sidebar.collapsed {
+            min-width: 80px;
+            max-width: 80px;
+            padding: 20px 10px;
+        }
+        .sidebar .nav-link {
+            color: #ECF0F1;
+            margin-bottom: 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link:hover {
+            color: #FF5722;
+        }
+        .sidebar .nav-link svg {
+            margin-right: 15px;
+            min-width: 20px;
+        }
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+        /* Content styling */
+        .content {
+            flex: 1;
+            padding: 30px;
+            background-color: #ECF0F1;
+        }
+        /* Top Navbar */
+        .top-navbar {
+            background-color: #2C3E50;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #ECF0F1 !important;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand svg {
+            margin-right: 8px;
+        }
+        .navbar-nav .nav-link {
+            color: #ECF0F1 !important;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-nav .nav-link svg {
+            margin-right: 5px;
+        }
+        /* Toggle Button for Sidebar */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 260px;
+            background-color: #FF5722;
+            border: none;
+            color: #ffffff;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: left 0.3s;
+        }
+        .sidebar.collapsed + .toggle-btn {
+            left: 90px;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                height: 100%;
+                z-index: 1000;
+            }
+            .sidebar.collapsed {
+                left: 0;
+            }
+            .toggle-btn {
+                left: 20px;
+                top: 15px;
+                background-color: #FF5722;
+            }
+            .sidebar.collapsed + .toggle-btn {
+                left: 20px;
+            }
+        }
+        /* Delete Icon Styling */
+        .delete-icon {
+            color: #E74C3C;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .delete-icon:hover {
+            color: #C0392B;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg top-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ECF0F1" class="bi bi-map" viewBox="0 0 16 16">
+                    <path d="M15.817 1.203A.5.5 0 0 1 16 1.5V14.5a.5.5 0 0 1-.183.396l-5 5a.5.5 0 0 1-.708 0l-5-5A.5.5 0 0 1 5 14.5V1.5a.5.5 0 0 1 .183-.396l5-5a.5.5 0 0 1 .708 0l5 5zM6.5 12.793l3-3 3 3V2.207l-3-3-3 3V12.793z"/>
+                </svg>
+                Trip App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">
+                            <svg data-feather="home" width="20" height="20"></svg> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg data-feather="map-pin" width="20" height="20"></svg> Destinations
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg data-feather="user" width="20" height="20"></svg> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg data-feather="log-out" width="20" height="20"></svg> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <!-- Left Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <svg data-feather="search" width="20" height="20"></svg>
+                        <span>Search Trips</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_trip' %}">
+                        <svg data-feather="plus-circle" width="20" height="20"></svg>
+                        <span>Create New Trip</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <svg data-feather="bookmark" width="20" height="20"></svg>
+                        <span>Favorites</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <svg data-feather="settings" width="20" height="20"></svg>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Toggle Button for Sidebar -->
+        <button class="toggle-btn d-none d-md-block">
+            <svg data-feather="chevron-left" width="20" height="20"></svg>
+        </button>
+
+        <!-- Content Area -->
+        <div class="content">
+            {% block content %}
+            
+            <!-- Example Content with Delete Icon -->
+            <div class="card mb-3">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">Sample Trip</h5>
+                        <p class="card-text">Explore the beautiful landscapes and vibrant cities.</p>
+                    </div>
+                    <div>
+                        <svg data-feather="trash-2" class="delete-icon" width="24" height="24"></svg>
+                    </div>
+                </div>
+            </div>
+            
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (including Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Feather Icons JS -->
+    <script>
+        feather.replace()
+
+        // Sidebar toggle functionality
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const sidebar = document.querySelector('.sidebar');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtn.innerHTML = feather.icons['chevron-right'].toSvg({width: 20, height: 20});
+            } else {
+                toggleBtn.innerHTML = feather.icons['chevron-left'].toSvg({width: 20, height: 20});
+            }
+        });
+
+        // Responsive sidebar toggle
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        navbarToggler.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+    </script>
+</body>
+</html>

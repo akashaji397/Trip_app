@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+        body {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .form-container {
+            width: 90%;
+            max-width: 500px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group label {
+            font-size: 14px;
+        }
+        .form-control, .form-check-input {
+            font-size: 14px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Update Recipe</h1>
+
+        <form action="{% url 'update_trip' trips.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="place_name">Place Name</label>
+                <input type="text" class="form-control" id="place_name" value="{{ trips.place_name }}" name="place_name" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="weather">Weather</label>
+                <input type="text" class="form-control" id="weather" value="{{ trips.weather }}" name="weather" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" class="form-control" value="{{ trips.state }}" id="state" name="state" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" class="form-control" value="{{ trips.district }}" id="district" name="district" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="google_map_link">Google Map Link</label>
+                <input type="url" class="form-control" value="{{ trips.google_map_link }}" id="google_map_link" name="google_map_link" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4" required>{{ trips.description }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="Trip_img">Trip Image</label>
+                {% if trips.Trip_img %}
+                    <img src="{{ trips.Trip_img }}" alt="Trip Image" class="img-fluid mb-3" />
+                {% endif %}
+                <input type="file" class="form-control-file" id="Trip_img" name="Trip_img">
+            </div>
+            
+
+            <button type="submit" class="btn btn-success btn-block">Submit</button>
+        </form>
+    </div>
+    {% endblock %}
